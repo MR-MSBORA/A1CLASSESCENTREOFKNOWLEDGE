@@ -1,0 +1,94 @@
+/* @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&family=Space+Mono:wght@700&display=swap');
+
+@import "tailwindcss";
+
+/* @tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    @apply transition-colors duration-300;
+  }
+  body {
+    @apply font-body bg-white text-gray-900;
+  }
+  html.dark body {
+    @apply bg-[#06091a] text-gray-100;
+  }
+  h1, h2, h3, h4 {
+    @apply font-display;
+  }
+}
+
+@layer utilities {
+  .glass {
+    @apply bg-white/10 dark:bg-white/5 backdrop-blur-md border border-white/20;
+  }
+} 
+*/
+/* 
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&family=Space+Mono:wght@700&display=swap');
+
+@import "tailwindcss";
+
+@theme {
+  --color-royal: #1a3c8f;
+  --color-royal-light: #2a52c2;
+  --color-royal-dark: #0f2660;
+  --color-gold: #d4a017;
+  --color-gold-light: #f0c040;
+
+  --font-display: 'Playfair Display', serif;
+  --font-body: 'DM Sans', sans-serif;
+  --font-mono: 'Space Mono', monospace;
+}
+
+html {
+  font-family: 'DM Sans', sans-serif;
+}
+
+body {
+  background-color: #06091a;
+  color: #f1f5f9;
+} */
+
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&family=Space+Mono:wght@700&display=swap');
+
+@import "tailwindcss";
+
+@theme {
+  --color-royal: #1a3c8f;
+  --color-royal-light: #2a52c2;
+  --color-royal-dark: #0f2660;
+  --color-gold: #d4a017;
+  --color-gold-light: #f0c040;
+  --font-display: 'Playfair Display', serif;
+  --font-body: 'DM Sans', sans-serif;
+  --font-mono: 'Space Mono', monospace;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+  box-sizing: border-box;
+}
+
+html {
+  font-family: 'DM Sans', sans-serif;
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #06091a;
+  color: #f1f5f9;
+  overflow-x: hidden;
+}
+
+/* Mobile scrollbar hide */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #1a3c8f; border-radius: 4px; }
+
+/* Prevent horizontal scroll */
+.overflow-x-auto { -webkit-overflow-scrolling: touch; }
