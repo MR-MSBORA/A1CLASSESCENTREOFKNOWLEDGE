@@ -101,7 +101,7 @@ export default function App() {
           <TeacherLayout />
         </ProtectedRoute>
       } />
-
+      console.log(import.meta.env.VITE_API_URL);
       {/* Admin Panel */}
       <Route path="/admin/*" element={
         <ProtectedRoute role="admin">
@@ -109,5 +109,6 @@ export default function App() {
         </ProtectedRoute>
       } />
     </Routes>
+
   );
 }
