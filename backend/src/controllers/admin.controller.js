@@ -343,17 +343,27 @@ export const getStats = asyncHandler(async (req, res) => {
 // ==============================
 // GET USERS
 // ==============================
+// export const getAllUsers = asyncHandler(async (req, res) => {
+
+//   const { role } = req.query;
+//   const filter = role ? { role } : {};
+
+//   const users = await User.find(filter)
+//     .select("-password -refreshToken");
+
+//   res.json(
+//     new ApiResponse(200, users, "Users fetched successfully")
+//   );
+// });
 export const getAllUsers = asyncHandler(async (req, res) => {
+  const { role, class: cls, branch } = req.query;
+  const filter = {};
+  if (role)   filter.role   = role;
+  if (cls)    filter.class  = Number(cls);
+  if (branch) filter.branch = branch;
 
-  const { role } = req.query;
-  const filter = role ? { role } : {};
-
-  const users = await User.find(filter)
-    .select("-password -refreshToken");
-
-  res.json(
-    new ApiResponse(200, users, "Users fetched successfully")
-  );
+  const users = await User.find(filter).select('-password -refreshToken');
+  res.json(new ApiResponse(200, users, 'Users fetched'));
 });
 
 
@@ -624,60 +634,83 @@ export const createStaffAccount = asyncHandler(async (req, res) => {
 // ==============================
 // REMOVE STAFF (SUPER ADMIN)
 // ==============================
-export const removeStaff = asyncHandler(async (req, res) => {
+// export const removeStaff = asyncHandler(async (req, res) => {
 
+//   const { id } = req.params;
+
+//   // check admin first
+//   const user = await User.findById(id);
+
+//   if (user) {
+
+//     if (user.role === "superadmin")
+//       throw new ApiError(
+//         403,
+//         "Cannot delete super admin"
+//       );
+
+//     await User.findByIdAndDelete(id);
+
+//     return res.json(
+//       new ApiResponse(
+//         200,
+//         {},
+//         "Admin removed successfully"
+//       )
+//     );
+//   }
+
+//   // check teacher collection
+//   const teacher = await Teacher.findById(id);
+
+//   if (teacher) {
+
+//     if (teacher.photoPublicId) {
+//       try {
+//         await cloudinary.uploader.destroy(
+//           teacher.photoPublicId
+//         );
+//       } catch (err) {
+//         console.warn(
+//           "Cloudinary delete failed:",
+//           err.message
+//         );
+//       }
+//     }
+
+//     await Teacher.findByIdAndDelete(id);
+
+//     return res.json(
+//       new ApiResponse(
+//         200,
+//         {},
+//         "Teacher removed successfully"
+//       )
+//     );
+//   }
+
+//   throw new ApiError(404, "Staff member not found");
+// });
+export const removeStaff = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
-  // check admin first
-  const user = await User.findById(id);
-
-  if (user) {
-
-    if (user.role === "superadmin")
-      throw new ApiError(
-        403,
-        "Cannot delete super admin"
-      );
-
-    await User.findByIdAndDelete(id);
-
-    return res.json(
-      new ApiResponse(
-        200,
-        {},
-        "Admin removed successfully"
-      )
-    );
-  }
-
-  // check teacher collection
+  // Check teachers collection
   const teacher = await Teacher.findById(id);
-
   if (teacher) {
-
     if (teacher.photoPublicId) {
-      try {
-        await cloudinary.uploader.destroy(
-          teacher.photoPublicId
-        );
-      } catch (err) {
-        console.warn(
-          "Cloudinary delete failed:",
-          err.message
-        );
-      }
+      try { await cloudinary.uploader.destroy(teacher.photoPublicId); } catch {}
     }
-
-    await Teacher.findByIdAndDelete(id);
-
-    return res.json(
-      new ApiResponse(
-        200,
-        {},
-        "Teacher removed successfully"
-      )
-    );
+    await Teacher.deleteOne({ _id: id });  // ← use deleteOne not findByIdAndDelete
+    return res.json(new ApiResponse(200, {}, 'Teacher removed'));
   }
 
-  throw new ApiError(404, "Staff member not found");
+  // Check users
+  const user = await User.findById(id);
+  if (user) {
+    if (user.role === 'superadmin') throw new ApiError(403, 'Cannot delete superadmin');
+    await User.deleteOne({ _id: id });
+    return res.json(new ApiResponse(200, {}, 'Staff removed'));
+  }
+
+  throw new ApiError(404, 'Staff not found');
 });

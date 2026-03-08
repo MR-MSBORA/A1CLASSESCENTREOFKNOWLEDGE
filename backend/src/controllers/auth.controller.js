@@ -15,8 +15,8 @@ import jwt from 'jsonwebtoken';
 
 const cookieOpts = {
   httpOnly: true,
-  secure:   process.env.NODE_ENV === 'production',
-  sameSite: 'strict',
+  secure:   process.env.NODE_ENV === 'production',  // true on render
+  sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict', // 'none' for cross-origin
 };
 
 /* ===============================

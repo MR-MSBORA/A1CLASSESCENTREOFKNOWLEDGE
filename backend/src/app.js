@@ -22,7 +22,12 @@ import teacherRoutes from './routes/v1/teachers.routes.js';
 
 const app = express();
 app.use(helmet());
-app.use(cors({ origin: process.env.FRONTEND_URL, credentials: true }));
+app.use(cors({
+  origin:      process.env.FRONTEND_URL,
+  credentials: true,
+  methods:     ['GET','POST','PUT','PATCH','DELETE','OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+}));
 app.use(mongoSanitize());
 // Only rate limit in production
 // In development — no limit

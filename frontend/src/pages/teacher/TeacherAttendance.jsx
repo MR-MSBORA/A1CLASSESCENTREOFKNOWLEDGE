@@ -1,4 +1,4 @@
- 
+
 // import { useEffect, useState } from 'react';
 // import api from '../../services/api';
 // import toast from 'react-hot-toast';
@@ -139,32 +139,34 @@ import toast from 'react-hot-toast';
 import { useAuth } from '../../context/AuthContext';
 
 export default function TeacherAttendance() {
-  const { user }                                = useAuth();
-  const [students,    setStudents]              = useState([]);
-  const [records,     setRecords]               = useState({});
-  const [date,        setDate]                  = useState(new Date().toISOString().split('T')[0]);
-  const [subject,     setSubject]               = useState('General');
-  const [filterClass, setFilterClass]           = useState('');
-  const [saving,      setSaving]                = useState(false);
-  const [loading,     setLoading]               = useState(true);
+  const { user } = useAuth();
+  const [students, setStudents] = useState([]);
+  const [records, setRecords] = useState({});
+  const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
+  const [subject, setSubject] = useState('General');
+  const [filterClass, setFilterClass] = useState('');
+  const [saving, setSaving] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   // Teacher's assigned classes and branch
   const teacherClasses = user?.classes || [];
-  const teacherBranch  = user?.branch  || 'All';
+  const teacherBranch = user?.branch || 'All';
 
   useEffect(() => {
-    api.get('/admin/users?role=student')
+    const teacherClasses = user?.classes || [];
+
+    // Build query — filter by teacher's classes directly from backend
+    const classParam = teacherClasses.length > 0
+      ? `&class=${teacherClasses[0]}`  // start with first class
+      : '';
+
+    api.get(`/admin/users?role=student${classParam}`)
       .then(r => {
         let list = Array.isArray(r.data.data) ? r.data.data : [];
 
-        // Filter by teacher's assigned classes
+        // Filter all assigned classes
         if (teacherClasses.length > 0) {
           list = list.filter(s => teacherClasses.includes(Number(s.class)));
-        }
-
-        // Filter by teacher's branch
-        if (teacherBranch !== 'All') {
-          list = list.filter(s => !s.branch || s.branch === teacherBranch);
         }
 
         setStudents(list);
@@ -179,7 +181,7 @@ export default function TeacherAttendance() {
   // Only show classes this teacher teaches
   const allowedClasses = teacherClasses.length > 0
     ? teacherClasses
-    : [1,2,3,4,5,6,7,8,9,10,11,12];
+    : [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
   const filtered = filterClass
     ? students.filter(s => String(s.class) === filterClass)
@@ -192,9 +194,9 @@ export default function TeacherAttendance() {
       const recs = filtered.map(s => ({
         student: s._id,
         date,
-        status:  records[s._id] || 'present',
+        status: records[s._id] || 'present',
         subject,
-        class:   s.class,
+        class: s.class,
       }));
       const res = await api.post('/admin/attendance', { records: recs });
       toast.success(`Attendance saved for ${res.data.data.saved} students ✅`);
@@ -242,7 +244,7 @@ export default function TeacherAttendance() {
           <label className="text-xs text-gray-400 mb-1.5 block">Subject</label>
           <select value={subject} onChange={e => setSubject(e.target.value)}
             className="px-4 py-2.5 rounded-xl border border-white/10 bg-[#0c1229] text-white text-sm focus:outline-none focus:border-gold">
-            {['General','Physics','Chemistry','Maths','Biology','English','Accounts','Computer'].map(s => (
+            {['General', 'Physics', 'Chemistry', 'Maths', 'Biology', 'English', 'Accounts', 'Computer'].map(s => (
               <option key={s} value={s}>{s}</option>
             ))}
           </select>
@@ -277,7 +279,7 @@ export default function TeacherAttendance() {
             <table className="w-full text-sm">
               <thead className="bg-white/5">
                 <tr>
-                  {['Student','Class','Status'].map(h => (
+                  {['Student', 'Class', 'Status'].map(h => (
                     <th key={h}
                       className="px-5 py-3 text-left text-xs font-bold text-gray-400 uppercase">
                       {h}
@@ -292,18 +294,17 @@ export default function TeacherAttendance() {
                     <td className="px-5 py-3 text-gray-400">Class {s.class}</td>
                     <td className="px-5 py-3">
                       <div className="flex gap-2">
-                        {['present','absent','late'].map(status => (
+                        {['present', 'absent', 'late'].map(status => (
                           <button key={status}
-                            onClick={() => setRecords({...records, [s._id]: status})}
-                            className={`px-3 py-1 rounded-lg text-xs font-semibold capitalize transition-colors ${
-                              records[s._id] === status
+                            onClick={() => setRecords({ ...records, [s._id]: status })}
+                            className={`px-3 py-1 rounded-lg text-xs font-semibold capitalize transition-colors ${records[s._id] === status
                                 ? status === 'present'
                                   ? 'bg-green-500 text-white'
                                   : status === 'absent'
-                                  ? 'bg-red-500 text-white'
-                                  : 'bg-yellow-500 text-white'
+                                    ? 'bg-red-500 text-white'
+                                    : 'bg-yellow-500 text-white'
                                 : 'bg-white/10 text-gray-400 hover:bg-white/20'
-                            }`}>
+                              }`}>
                             {status}
                           </button>
                         ))}

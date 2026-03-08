@@ -157,7 +157,7 @@ const teacherSchema = new mongoose.Schema(
 
   classes: [
     {
-      type:  String
+      type: Number
     }
   ],
 
@@ -217,7 +217,6 @@ teacherSchema.pre("save", async function () {
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
 });
-
 
 
 // 🔑 Compare password during login
