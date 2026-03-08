@@ -1,78 +1,186 @@
-// import mongoose from 'mongoose';
-// import bcrypt   from 'bcryptjs';
-// import jwt      from 'jsonwebtoken';
+// import mongoose from "mongoose";
+// import bcrypt from "bcryptjs";
+// import jwt from "jsonwebtoken";
 
-// const teacherSchema = new mongoose.Schema({
-
+// const teacherSchema = new mongoose.Schema(
+// {
 //   // Login Credentials
-//   email:    { type: String, required: true, unique: true, lowercase: true },
-//   password: { type: String, required: true },
-
-//   // Personal Info
-//   name:          { type: String, required: true },
-//   phone:         { type: String, default: '' },
-//   photo:         { type: String, default: '' },
-//   photoPublicId: { type: String, default: '' },
-//   gender:        { type: String, enum: ['Male','Female','Other',''] },
-//   dateOfBirth:   { type: Date },
-//   address:       { type: String, default: '' },
-
-//   // Professional Info
-//   qualification: { type: String, default: '' },
-//   experience:    { type: Number, default: 0 },
-//   bio:           { type: String, default: '' },
-//   subjects:      [{ type: String }],
-//   classes:       [{ type: Number }],
-//   branch: {
-//     type:    String,
-//     enum:    ['Zirakpur','Baltana','Behlana','All'],
-//     default: 'All',
+//   email: {
+//     type: String,
+//     required: true,
+//     unique: true,
+//     lowercase: true,
+//     trim: true
 //   },
 
-//   // Role — always teacher
-//   role: { type: String, default: 'teacher' },
+//   password: {
+//     type: String,
+//     required: true,
+//     minlength: 6
+//   },
+
+//   // Personal Info
+//   name: {
+//     type: String,
+//     required: true,
+//     trim: true
+//   },
+
+//   phone: {
+//     type: String,
+//     default: ""
+//   },
+
+//   photo: {
+//     type: String,
+//     default: ""
+//   },
+
+//   photoPublicId: {
+//     type: String,
+//     default: ""
+//   },
+
+//   gender: {
+//     type: String,
+//     enum: ["Male", "Female", "Other", ""],
+//     default: ""
+//   },
+
+//   dateOfBirth: {
+//     type: Date
+//   },
+
+//   address: {
+//     type: String,
+//     default: ""
+//   },
+
+//   // Professional Info
+//   qualification: {
+//     type: String,
+//     default: ""
+//   },
+
+//   experience: {
+//     type: Number,
+//     default: 0
+//   },
+
+//   bio: {
+//     type: String,
+//     default: ""
+//   },
+
+//   subjects: [
+//     {
+//       type: String
+//     }
+//   ],
+
+//   classes: [
+//     {
+//       type: Number
+//     }
+//   ],
+
+//   branch: {
+//     type: String,
+//     enum: ["Zirakpur", "Baltana", "Behlana", "All"],
+//     default: "All"
+//   },
+
+//   // Role
+//   role: {
+//     type: String,
+//     default: "teacher"
+//   },
 
 //   // Status
-//   isActive:    { type: Boolean, default: true },
-//   joiningDate: { type: Date,    default: Date.now },
+//   isActive: {
+//     type: Boolean,
+//     default: true
+//   },
+
+//   joiningDate: {
+//     type: Date,
+//     default: Date.now
+//   },
 
 //   // Token
-//   refreshToken: { type: String },
+//   refreshToken: {
+//     type: String,
+//     default: ""
+//   }
 
-// }, { timestamps: true });
+// },
+// {
+//   timestamps: true
+// }
+// );
 
-// // Hash password before save
-// teacherSchema.pre('save', async function(next) {
-//   if (!this.isModified('password')) return next();
-//   this.password = await bcrypt.hash(this.password, 10);
-//   next();
+
+// // 🔐 Hash password before saving
+// // teacherSchema.pre("save", async function (next) {
+
+// //   if (!this.isModified("password")) return next();
+
+// //   try {
+// //     const salt = await bcrypt.genSalt(10);
+// //     this.password = await bcrypt.hash(this.password, salt);
+// //     next();
+// //   } catch (error) {
+// //     next(error);
+// //   }
+
+// // });
+// teacherSchema.pre("save", async function () {
+//   if (!this.isModified("password")) return;
+
+//   const salt = await bcrypt.genSalt(10);
+//   this.password = await bcrypt.hash(this.password, salt);
 // });
 
-// // Compare password
-// teacherSchema.methods.comparePassword = async function(password) {
-//   return bcrypt.compare(password, this.password);
+
+// // 🔑 Compare password during login
+// teacherSchema.methods.comparePassword = async function (password) {
+//   return await bcrypt.compare(password, this.password);
 // };
 
-// // Generate access token
-// teacherSchema.methods.generateAccessToken = function() {
+
+// // 🎫 Generate access token
+// teacherSchema.methods.generateAccessToken = function () {
+
 //   return jwt.sign(
-//     { _id: this._id, email: this.email, role: 'teacher' },
-//     process.env.JWT_ACCESS_SECRET,      // ← must match .env
-//     { expiresIn: '1d' }
+//     {
+//       _id: this._id,
+//       email: this.email,
+//       role: this.role
+//     },
+//     process.env.JWT_ACCESS_SECRET,
+//     { expiresIn: "1d" }
 //   );
+
 // };
 
-// // Generate refresh token
-// teacherSchema.methods.generateRefreshToken = function() {
+
+// // 🔄 Generate refresh token
+// teacherSchema.methods.generateRefreshToken = function () {
+
 //   return jwt.sign(
-//     { _id: this._id },
-//     process.env.REFRESH_TOKEN_SECRET,
-//     { expiresIn: process.env.REFRESH_TOKEN_EXPIRY || '7d' }
+//     {
+//       _id: this._id
+//     },
+//     process.env.JWT_REFRESH_SECRET,
+//     { expiresIn: "7d" }
 //   );
+
 // };
 
-// export default mongoose.model('Teacher', teacherSchema);
 
+// const Teacher = mongoose.model("Teacher", teacherSchema);
+
+// export default Teacher;
 
 
 import mongoose from "mongoose";
@@ -93,7 +201,8 @@ const teacherSchema = new mongoose.Schema(
   password: {
     type: String,
     required: true,
-    minlength: 6
+    minlength: 6,
+    select: false  // ✅ added: don't expose password by default
   },
 
   // Personal Info
@@ -197,37 +306,27 @@ const teacherSchema = new mongoose.Schema(
 );
 
 
-// 🔐 Hash password before saving
-// teacherSchema.pre("save", async function (next) {
-
-//   if (!this.isModified("password")) return next();
-
-//   try {
-//     const salt = await bcrypt.genSalt(10);
-//     this.password = await bcrypt.hash(this.password, salt);
-//     next();
-//   } catch (error) {
-//     next(error);
-//   }
-
-// });
-teacherSchema.pre("save", async function () {
-  if (!this.isModified("password")) return;
-
-  const salt = await bcrypt.genSalt(10);
-  this.password = await bcrypt.hash(this.password, salt);
+// 🔐 Hash password before saving — ✅ FIXED: uses next() correctly
+teacherSchema.pre("save", function (next) {
+  if (!this.isModified("password")) return next();
+  bcrypt.genSalt(10)
+    .then((salt) => bcrypt.hash(this.password, salt))
+    .then((hashed) => {
+      this.password = hashed;
+      next();
+    })
+    .catch((err) => next(err));
 });
 
 
 // 🔑 Compare password during login
-teacherSchema.methods.comparePassword = async function (password) {
-  return await bcrypt.compare(password, this.password);
+teacherSchema.methods.comparePassword = function (password) {
+  return bcrypt.compare(password, this.password);
 };
 
 
 // 🎫 Generate access token
 teacherSchema.methods.generateAccessToken = function () {
-
   return jwt.sign(
     {
       _id: this._id,
@@ -237,13 +336,11 @@ teacherSchema.methods.generateAccessToken = function () {
     process.env.JWT_ACCESS_SECRET,
     { expiresIn: "1d" }
   );
-
 };
 
 
 // 🔄 Generate refresh token
 teacherSchema.methods.generateRefreshToken = function () {
-
   return jwt.sign(
     {
       _id: this._id
@@ -251,7 +348,6 @@ teacherSchema.methods.generateRefreshToken = function () {
     process.env.JWT_REFRESH_SECRET,
     { expiresIn: "7d" }
   );
-
 };
 
 
