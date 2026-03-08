@@ -307,15 +307,10 @@ const teacherSchema = new mongoose.Schema(
 
 
 // 🔐 Hash password before saving — ✅ FIXED: uses next() correctly
-teacherSchema.pre("save", function (next) {
-  if (!this.isModified("password")) return next();
-  bcrypt.genSalt(10)
-    .then((salt) => bcrypt.hash(this.password, salt))
-    .then((hashed) => {
-      this.password = hashed;
-      next();
-    })
-    .catch((err) => next(err));
+teacherSchema.pre("save", async function () {
+  if (!this.isModified("password")) return; // no next needed
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
 });
 
 
