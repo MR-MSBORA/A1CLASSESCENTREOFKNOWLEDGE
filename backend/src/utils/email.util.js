@@ -1,16 +1,19 @@
 import nodemailer from "nodemailer";
 
 const transporter = nodemailer.createTransport({
-  service: "gmail",
+  service: process.env.EMAIL_SERVICE,
+  host: process.env.EMAIL_HOST,
+  port: process.env.EMAIL_PORT,
+  secure: false, // true for 465, false for 587
   auth: {
-    user: process.env.GMAIL_USER,   // your Gmail address
-    pass: process.env.GMAIL_PASS,   // Gmail App Password (not your real password)
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASSWORD,
   },
 });
 
 export const sendOtpEmail = async (toEmail, otp) => {
   await transporter.sendMail({
-    from: `"A1 Classes Centre" <${process.env.GMAIL_USER}>`,
+    from: process.env.EMAIL_FROM,
     to: toEmail,
     subject: "Your Password Reset OTP",
     html: `
