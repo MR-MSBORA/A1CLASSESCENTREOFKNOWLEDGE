@@ -54,6 +54,7 @@ import NotesStore from './pages/public/NotesStore';
 import Results from './pages/public/Results';
 import Contact from './pages/public/Contact';
 import Gallery from './pages/public/Gallery';
+import ForgotPassword from './pages/auth/Login';
 
 // Auth pages
 import Login from './pages/auth/Login';
@@ -64,6 +65,7 @@ import StudentDashboard from './pages/student/Dashboard';
 import AdminLayout from './pages/admin/AdminLayout';
 import TeacherLayout from './pages/teacher/TeacherLayout';
 import Teachers from './pages/public/Teachers';
+import ForgotPassword from './pages/auth/ForgotPassword';
 
 const PL = ({ children }) => (
   <>
@@ -85,9 +87,12 @@ export default function App() {
       <Route path="/contact" element={<PL><Contact /></PL>} />
       <Route path="/gallery" element={<PL><Gallery /></PL>} />
       <Route path="/teachers" element={<PL><Teachers /></PL>} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
+
       {/* Auth */}
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
+      <Route path="/forgot-password" element={<ForgotPassword onLoginClick={() => navigate('/login')} />} />
 
       {/* Student Portal */}
       <Route path="/dashboard/*" element={
