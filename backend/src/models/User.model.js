@@ -61,11 +61,10 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-userSchema.pre("save", function (next) {
-  if (!this.isModified("password")) return next();
-  bcrypt.hash(this.password, 12)
-    .then((hashed) => { this.password = hashed; next(); })
-    .catch((err) => next(err));
+userSchema.pre("save", async function () {
+  if (!this.isModified("password")) return;
+
+  this.password = await bcrypt.hash(this.password, 12);
 });
 
 userSchema.methods.comparePassword = function (candidate) {
