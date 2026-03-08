@@ -14,20 +14,22 @@
 //   }),
 // );
 
-
 import "dotenv/config";
 import app from "./src/app.js";
 import cors from "cors";
 import connectDB from "./src/config/db.js";
-
+import morgan from "morgan";
 const PORT = process.env.PORT || 5000;
 
+if (process.env.NODE_ENV === "development") {
+  app.use(morgan("dev"));
+}
 // Enable CORS first
 app.use(
   cors({
     origin: "https://a1classescentreofknowledge-1.onrender.com",
     credentials: true,
-  })
+  }),
 );
 
 // Connect DB and start server

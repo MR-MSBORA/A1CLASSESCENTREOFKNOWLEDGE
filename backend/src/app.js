@@ -84,4 +84,6 @@ app.use((req, res) =>
   res.status(404).json({ success: false, message: "Route not found" }),
 );
 app.use(errorHandler);
+app.set("trust proxy", 1);
+
 export default app;
