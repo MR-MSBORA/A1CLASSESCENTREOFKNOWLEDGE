@@ -1,3 +1,5 @@
+
+
 // import { Routes, Route } from "react-router-dom";
 
 // import Navbar from "./components/common/Navbar";
@@ -63,14 +65,13 @@
 
 //       {/* Student Portal */}
 //       <Route
-//         path="/dashboard"
+//         path="/dashboard/*"
 //         element={
 //           <ProtectedRoute role="student">
 //             <Dashboard />
 //           </ProtectedRoute>
 //         }
 //       >
-//         <Route index element={<Dashboard />} />
 //         <Route path="attendance" element={<Attendance />} />
 //         <Route path="marks" element={<Marks />} />
 //         <Route path="assignments" element={<Assignments />} />
@@ -108,6 +109,7 @@
 
 
 import { Routes, Route } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 
 import Navbar from "./components/common/Navbar";
 import Footer from "./components/common/Footer";
@@ -138,8 +140,21 @@ import Notices from "./pages/student/Notices";
 import MyNotes from "./pages/student/MyNotes";
 import Profile from "./pages/student/Profile";
 
-/* Admin + Teacher */
+/* Admin Pages */
 import AdminLayout from "./pages/admin/AdminLayout";
+import Overview from "./pages/admin/Overview";
+import ManageStudents from "./pages/admin/ManageStudents";
+import ManageStaff from "./pages/admin/ManageStaff";
+import ManageNotes from "./pages/admin/ManageNotes";
+import ManageGallery from "./pages/admin/ManageGallery";
+import ManageDoubts from "./pages/admin/ManageDoubts";
+import ManageResults from "./pages/admin/ManageResults";
+import ManageAttendance from "./pages/admin/ManageAttendance";
+import ManageMarks from "./pages/admin/ManageMarks";
+import ManageAnnouncements from "./pages/admin/ManageAnnouncements";
+import ManageReviews from "./pages/admin/ManageReviews";
+
+/* Teacher */
 import TeacherLayout from "./pages/teacher/TeacherLayout";
 
 /* Public Layout */
@@ -200,13 +215,25 @@ export default function App() {
 
       {/* Admin Panel */}
       <Route
-        path="/admin/*"
+        path="/admin"
         element={
           <ProtectedRoute role="admin">
             <AdminLayout />
           </ProtectedRoute>
         }
-      />
+      >
+        <Route index element={<Overview />} />
+        <Route path="students" element={<ManageStudents />} />
+        <Route path="staff" element={<ManageStaff />} />
+        <Route path="notes" element={<ManageNotes />} />
+        <Route path="gallery" element={<ManageGallery />} />
+        <Route path="doubts" element={<ManageDoubts />} />
+        <Route path="results" element={<ManageResults />} />
+        <Route path="attendance" element={<ManageAttendance />} />
+        <Route path="marks" element={<ManageMarks />} />
+        <Route path="announcements" element={<ManageAnnouncements />} />
+        <Route path="reviews" element={<ManageReviews />} />
+      </Route>
 
     </Routes>
   );
