@@ -43,12 +43,14 @@ const TIPS = [
   '💡 Teaching a concept to someone else cements it for you.',
 ];
 
+// ── Student-only actions ─────────────────────────────────────────────────────
+// No admin actions (Upload Note, Post Result, etc.) here — ever.
 const ACTIONS = [
   { to: 'attendance',  icon: '📅', label: 'Attendance',  desc: 'Track your presence',  locked: true,  grad: 'rgba(59,130,246,0.15)',  border: 'rgba(59,130,246,0.25)'  },
   { to: 'marks',       icon: '📊', label: 'My Marks',    desc: 'View exam results',    locked: true,  grad: 'rgba(139,92,246,0.15)', border: 'rgba(139,92,246,0.25)' },
   { to: 'assignments', icon: '📝', label: 'Assignments', desc: 'Pending tasks',        locked: true,  grad: 'rgba(249,115,22,0.15)', border: 'rgba(249,115,22,0.25)' },
   { to: 'doubts',      icon: '💬', label: 'Ask Doubt',   desc: 'Get instant help',     locked: true,  grad: 'rgba(20,184,166,0.15)', border: 'rgba(20,184,166,0.25)' },
-  { to: 'notices',     icon: '📢', label: 'Notices',     desc: 'Latest updates',       locked: true,  grad: 'rgba(239,68,68,0.15)',  border: 'rgba(239,68,68,0.25)'  },
+  { to: 'notices',     icon: '📢', label: 'Notices',     desc: 'Latest updates',       locked: false, grad: 'rgba(239,68,68,0.15)',  border: 'rgba(239,68,68,0.25)'  },
   { to: 'notes',       icon: '📚', label: 'Notes',       desc: 'Study materials',      locked: false, grad: 'rgba(34,197,94,0.15)',  border: 'rgba(34,197,94,0.25)'  },
   { to: 'profile',     icon: '👤', label: 'My Profile',  desc: 'Edit your details',    locked: false, grad: 'rgba(148,163,184,0.1)', border: 'rgba(148,163,184,0.2)' },
 ];
@@ -64,7 +66,9 @@ export default function Overview() {
 
   useEffect(() => {
     refreshUser();
+    // Notices visible to everyone (enrolled or not)
     api.get('/student/announcements').then(r => setNotices(r.data.data?.slice(0, 3) || [])).catch(() => {});
+    // Attendance + marks only for enrolled students
     if (isEnrolled) {
       api.get('/student/attendance').then(r => setAttendance(r.data.data)).catch(() => {});
       api.get('/student/marks').then(r => setMarks(r.data.data || [])).catch(() => {});
@@ -73,7 +77,7 @@ export default function Overview() {
     return () => clearInterval(iv);
   }, [isEnrolled]);
 
-  const pct = Number(attendance?.percentage || 0);
+  const pct       = Number(attendance?.percentage || 0);
   const attColor  = pct >= 75 ? '#4ade80' : pct >= 50 ? '#facc15' : '#f87171';
   const attLabel  = pct >= 75 ? 'Excellent' : pct >= 50 ? 'Average' : pct > 0 ? 'Low' : 'No data';
 
@@ -81,12 +85,6 @@ export default function Overview() {
     const h = new Date().getHours();
     return h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening';
   };
-
-  const feeInfo = {
-    paid:    { label: 'All Clear ✅', color: '#4ade80' },
-    partial: { label: 'Partial ⚠️',  color: '#facc15' },
-    unpaid:  { label: 'Due ❌',       color: '#f87171' },
-  }[user?.feeStatus] || { label: 'Unpaid ❌', color: '#f87171' };
 
   return (
     <div className="pb-10 space-y-7">
@@ -151,10 +149,14 @@ export default function Overview() {
         </motion.div>
       )}
 
-      {/* ── Stat cards (enrolled only) ──────────── */}
+      {/* ── Stat cards (enrolled only) ──────────────────────────────────────
+           NOTE: Fee status is intentionally NOT shown here — students only
+           see attendance, class info, exams done, and batch.
+      ─────────────────────────────────────────────────────────────────────── */}
       {isEnrolled && (
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
 
+          {/* Attendance */}
           <motion.div {...fade(1)} className="col-span-1 rounded-2xl border p-5 flex flex-col items-center gap-2"
             style={{ background: 'linear-gradient(135deg,rgba(59,130,246,0.12),rgba(6,9,26,0.8))', borderColor: 'rgba(59,130,246,0.2)' }}>
             <p className="text-xs font-black tracking-widest uppercase text-gray-400 self-start">Attendance</p>
@@ -168,6 +170,7 @@ export default function Overview() {
               style={{ background: `${attColor}20`, color: attColor }}>{attLabel}</span>
           </motion.div>
 
+          {/* My Class */}
           <motion.div {...fade(2)} className="relative rounded-2xl border p-5 overflow-hidden"
             style={{ background: 'linear-gradient(135deg,rgba(245,200,66,0.12),rgba(6,9,26,0.8))', borderColor: 'rgba(245,200,66,0.2)' }}>
             <div className="absolute right-3 top-3 text-4xl opacity-10 select-none">🏫</div>
@@ -176,6 +179,7 @@ export default function Overview() {
             <p className="text-xs text-gray-500 mt-1">{user?.branch || 'A1 Classes'}</p>
           </motion.div>
 
+          {/* Exams Done */}
           <motion.div {...fade(3)} className="relative rounded-2xl border p-5 overflow-hidden"
             style={{ background: 'linear-gradient(135deg,rgba(74,222,128,0.1),rgba(6,9,26,0.8))', borderColor: 'rgba(74,222,128,0.2)' }}>
             <div className="absolute right-3 top-3 text-4xl opacity-10 select-none">📝</div>
@@ -184,13 +188,7 @@ export default function Overview() {
             <p className="text-xs text-gray-500 mt-1">{marks.length > 0 ? `Last: ${marks[0]?.subject}` : 'No results yet'}</p>
           </motion.div>
 
-          <motion.div {...fade(4)} className="relative rounded-2xl border p-5 overflow-hidden"
-            style={{ background: 'linear-gradient(135deg,rgba(168,85,247,0.1),rgba(6,9,26,0.8))', borderColor: 'rgba(168,85,247,0.2)' }}>
-            <div className="absolute right-3 top-3 text-4xl opacity-10 select-none">💳</div>
-            <p className="text-xs font-black tracking-widest uppercase text-gray-400 mb-2">Batch</p>
-            <p className="font-black text-lg text-white">{user?.enrolledBatch || '—'}</p>
-            <p className="text-xs mt-1" style={{ color: feeInfo.color }}>{feeInfo.label}</p>
-          </motion.div>
+          {/* ❌ Fee status card removed — students should not see payment info */}
 
         </div>
       )}
@@ -216,7 +214,7 @@ export default function Overview() {
             <span className="w-1 h-6 rounded-full inline-block" style={{ background: '#f5c842' }} />
             {isEnrolled ? 'Quick Actions' : 'Student Features'}
           </h2>
-          {!isEnrolled && <span className="text-xs text-gray-500">2 / {ACTIONS.length} accessible</span>}
+          {!isEnrolled && <span className="text-xs text-gray-500">3 / {ACTIONS.length} accessible</span>}
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
@@ -254,41 +252,43 @@ export default function Overview() {
         </div>
       </motion.div>
 
-      {/* ── Notices + Results (enrolled only) ───── */}
-      {isEnrolled && (
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-5">
+      {/* ── Notices (everyone) + Results (enrolled only) ─────────────────── */}
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-5">
 
-          <motion.div {...fade(7)} className="lg:col-span-3 rounded-2xl border p-5"
-            style={{ background: 'rgba(255,255,255,0.025)', borderColor: 'rgba(255,255,255,0.08)' }}>
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="font-black text-white text-sm flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-red-400 animate-pulse" /> Latest Notices
-              </h3>
-              <Link to="notices" className="text-xs font-semibold hover:underline" style={{ color: '#f5c842' }}>View all →</Link>
+        {/* Notices — visible to all students */}
+        <motion.div {...fade(7)} className="lg:col-span-3 rounded-2xl border p-5"
+          style={{ background: 'rgba(255,255,255,0.025)', borderColor: 'rgba(255,255,255,0.08)' }}>
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="font-black text-white text-sm flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-red-400 animate-pulse" /> Latest Notices
+            </h3>
+            <Link to="notices" className="text-xs font-semibold hover:underline" style={{ color: '#f5c842' }}>View all →</Link>
+          </div>
+          {notices.length === 0 ? (
+            <div className="flex flex-col items-center py-8 gap-2">
+              <span className="text-3xl">📭</span>
+              <p className="text-gray-500 text-sm">No notices yet</p>
             </div>
-            {notices.length === 0 ? (
-              <div className="flex flex-col items-center py-8 gap-2">
-                <span className="text-3xl">📭</span>
-                <p className="text-gray-500 text-sm">No notices yet</p>
-              </div>
-            ) : notices.map((n, i) => (
-              <motion.div key={n._id}
-                initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.5 + i * 0.07 }}
-                className="mb-3 p-4 rounded-xl border"
-                style={{ background: n.isImportant ? 'rgba(239,68,68,0.07)' : 'rgba(255,255,255,0.03)', borderColor: n.isImportant ? 'rgba(239,68,68,0.3)' : 'rgba(255,255,255,0.07)' }}>
-                <div className="flex items-start gap-3">
-                  <span className="text-lg">{n.isImportant ? '🚨' : '📌'}</span>
-                  <div>
-                    {n.isImportant && <span className="inline-block text-[10px] font-black bg-red-500 text-white px-2 py-0.5 rounded-full mb-1">IMPORTANT</span>}
-                    <p className="font-bold text-white text-xs">{n.title}</p>
-                    <p className="text-gray-400 text-xs mt-1 line-clamp-2">{n.content}</p>
-                  </div>
+          ) : notices.map((n, i) => (
+            <motion.div key={n._id}
+              initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.5 + i * 0.07 }}
+              className="mb-3 p-4 rounded-xl border"
+              style={{ background: n.isImportant ? 'rgba(239,68,68,0.07)' : 'rgba(255,255,255,0.03)', borderColor: n.isImportant ? 'rgba(239,68,68,0.3)' : 'rgba(255,255,255,0.07)' }}>
+              <div className="flex items-start gap-3">
+                <span className="text-lg">{n.isImportant ? '🚨' : '📌'}</span>
+                <div>
+                  {n.isImportant && <span className="inline-block text-[10px] font-black bg-red-500 text-white px-2 py-0.5 rounded-full mb-1">IMPORTANT</span>}
+                  <p className="font-bold text-white text-xs">{n.title}</p>
+                  <p className="text-gray-400 text-xs mt-1 line-clamp-2">{n.content}</p>
                 </div>
-              </motion.div>
-            ))}
-          </motion.div>
+              </div>
+            </motion.div>
+          ))}
+        </motion.div>
 
+        {/* Recent Results — enrolled only */}
+        {isEnrolled && (
           <motion.div {...fade(8)} className="lg:col-span-2 rounded-2xl border p-5"
             style={{ background: 'rgba(255,255,255,0.025)', borderColor: 'rgba(255,255,255,0.08)' }}>
             <div className="flex items-center justify-between mb-4">
@@ -319,9 +319,9 @@ export default function Overview() {
               );
             })}
           </motion.div>
+        )}
 
-        </div>
-      )}
+      </div>
 
     </div>
   );
