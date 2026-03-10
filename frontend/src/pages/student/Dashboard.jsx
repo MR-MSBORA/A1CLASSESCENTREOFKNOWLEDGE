@@ -1,8 +1,125 @@
+// // import React from "react";
+// // import { useNavigate } from "react-router-dom";
+
+// // export default function Dashboard() {
+// //   const navigate = useNavigate();
+
+// //   const quickActions = [
+// //     {
+// //       title: "Attendance",
+// //       desc: "Track presence",
+// //       icon: "📅",
+// //       color: "from-red-500/20 to-red-700/20",
+// //       border: "border-red-500/30",
+// //       path: "/dashboard/attendance",
+// //     },
+// //     {
+// //       title: "My Marks",
+// //       desc: "Exam results",
+// //       icon: "📊",
+// //       color: "from-blue-500/20 to-indigo-700/20",
+// //       border: "border-blue-500/30",
+// //       path: "/dashboard/marks",
+// //     },
+// //     {
+// //       title: "Assignments",
+// //       desc: "Pending tasks",
+// //       icon: "📝",
+// //       color: "from-purple-500/20 to-purple-700/20",
+// //       border: "border-purple-500/30",
+// //       path: "/dashboard/assignments",
+// //     },
+// //     {
+// //       title: "Ask Doubt",
+// //       desc: "Get help",
+// //       icon: "💬",
+// //       color: "from-green-500/20 to-green-700/20",
+// //       border: "border-green-500/30",
+// //       path: "/dashboard/doubt",
+// //     },
+// //   ];
+
+// //   return (
+// //     <div className="min-h-screen bg-gradient-to-br from-[#020617] via-[#0f172a] to-[#020617] text-white p-8">
+
+// //       {/* Header */}
+// //       <div className="bg-gradient-to-r from-indigo-600 via-purple-600 to-cyan-500 p-8 rounded-2xl shadow-xl mb-10">
+// //         <h1 className="text-3xl font-bold">Good Morning, Student 👋</h1>
+// //         <p className="opacity-80 mt-1">Class 10 · Student Portal</p>
+// //       </div>
+
+// //       {/* Stats Section */}
+// //       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+
+// //         <div className="bg-gradient-to-br from-blue-500/20 to-blue-700/20 p-6 rounded-xl border border-blue-500/30 hover:scale-105 transition">
+// //           <h3 className="text-sm text-blue-300">Attendance</h3>
+// //           <p className="text-3xl font-bold mt-2">0%</p>
+// //         </div>
+
+// //         <div className="bg-gradient-to-br from-green-500/20 to-green-700/20 p-6 rounded-xl border border-green-500/30 hover:scale-105 transition">
+// //           <h3 className="text-sm text-green-300">My Class</h3>
+// //           <p className="text-3xl font-bold mt-2">10</p>
+// //         </div>
+
+// //         <div className="bg-gradient-to-br from-purple-500/20 to-purple-700/20 p-6 rounded-xl border border-purple-500/30 hover:scale-105 transition">
+// //           <h3 className="text-sm text-purple-300">Exams</h3>
+// //           <p className="text-3xl font-bold mt-2">0</p>
+// //         </div>
+
+// //         <div className="bg-gradient-to-br from-yellow-500/20 to-orange-600/20 p-6 rounded-xl border border-yellow-500/30 hover:scale-105 transition">
+// //           <h3 className="text-sm text-yellow-300">Fee Status</h3>
+// //           <p className="text-2xl font-bold mt-2 text-yellow-400">Unpaid</p>
+// //         </div>
+
+// //       </div>
+
+// //       {/* Tip Banner */}
+// //       <div className="bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border border-yellow-400/30 rounded-lg p-4 mb-10">
+// //         <span className="font-semibold text-yellow-400">PRO TIP</span>
+// //         <span className="ml-3 text-gray-300">
+// //           Study in 25-minute focused bursts (Pomodoro technique).
+// //         </span>
+// //       </div>
+
+// //       {/* Quick Actions */}
+// //       <h2 className="text-xl font-semibold mb-5">Quick Actions</h2>
+
+// //       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+// //         {quickActions.map((action, index) => (
+// //           <div
+// //             key={index}
+// //             onClick={() => navigate(action.path)}
+// //             className={`bg-gradient-to-br ${action.color} p-6 rounded-xl border ${action.border}
+// //             hover:scale-105 hover:shadow-lg cursor-pointer transition`}
+// //           >
+// //             <div className="text-3xl mb-2">{action.icon}</div>
+// //             <h3 className="font-semibold">{action.title}</h3>
+// //             <p className="text-sm text-gray-400">{action.desc}</p>
+// //           </div>
+// //         ))}
+// //       </div>
+
+// //     </div>
+// //   );
+// // }
+
+
+
+
 // import React from "react";
-// import { useNavigate } from "react-router-dom";
+// import { useNavigate, Outlet } from "react-router-dom";
+// import { useAuth } from "../../context/AuthContext";
 
 // export default function Dashboard() {
 //   const navigate = useNavigate();
+//   const { user } = useAuth();
+
+//   const greet = () => {
+//     const h = new Date().getHours();
+//     if (h < 12) return "Good Morning";
+//     if (h < 17) return "Good Afternoon";
+//     return "Good Evening";
+//   };
 
 //   const quickActions = [
 //     {
@@ -35,30 +152,59 @@
 //       icon: "💬",
 //       color: "from-green-500/20 to-green-700/20",
 //       border: "border-green-500/30",
-//       path: "/dashboard/doubt",
+//       path: "/dashboard/doubts",
+//     },
+//     {
+//       title: "Notices",
+//       desc: "Latest updates",
+//       icon: "📢",
+//       color: "from-yellow-500/20 to-orange-600/20",
+//       border: "border-yellow-500/30",
+//       path: "/dashboard/notices",
+//     },
+//     {
+//       title: "Study Notes",
+//       desc: "Download material",
+//       icon: "📚",
+//       color: "from-cyan-500/20 to-blue-600/20",
+//       border: "border-cyan-500/30",
+//       path: "/dashboard/notes",
+//     },
+//     {
+//       title: "My Profile",
+//       desc: "Edit profile",
+//       icon: "👤",
+//       color: "from-pink-500/20 to-rose-600/20",
+//       border: "border-pink-500/30",
+//       path: "/dashboard/profile",
 //     },
 //   ];
 
 //   return (
 //     <div className="min-h-screen bg-gradient-to-br from-[#020617] via-[#0f172a] to-[#020617] text-white p-8">
 
-//       {/* Header */}
+//       {/* HEADER */}
 //       <div className="bg-gradient-to-r from-indigo-600 via-purple-600 to-cyan-500 p-8 rounded-2xl shadow-xl mb-10">
-//         <h1 className="text-3xl font-bold">Good Morning, Student 👋</h1>
-//         <p className="opacity-80 mt-1">Class 10 · Student Portal</p>
+//         <h1 className="text-3xl font-bold">
+//           {greet()}, {user?.name || "Student"} 👋
+//         </h1>
+
+//         <p className="opacity-80 mt-1">
+//           Class {user?.class || "-"} · Student Portal
+//         </p>
 //       </div>
 
-//       {/* Stats Section */}
+//       {/* STATS */}
 //       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
 
 //         <div className="bg-gradient-to-br from-blue-500/20 to-blue-700/20 p-6 rounded-xl border border-blue-500/30 hover:scale-105 transition">
 //           <h3 className="text-sm text-blue-300">Attendance</h3>
-//           <p className="text-3xl font-bold mt-2">0%</p>
+//           <p className="text-3xl font-bold mt-2">--%</p>
 //         </div>
 
 //         <div className="bg-gradient-to-br from-green-500/20 to-green-700/20 p-6 rounded-xl border border-green-500/30 hover:scale-105 transition">
 //           <h3 className="text-sm text-green-300">My Class</h3>
-//           <p className="text-3xl font-bold mt-2">10</p>
+//           <p className="text-3xl font-bold mt-2">{user?.class || "-"}</p>
 //         </div>
 
 //         <div className="bg-gradient-to-br from-purple-500/20 to-purple-700/20 p-6 rounded-xl border border-purple-500/30 hover:scale-105 transition">
@@ -68,12 +214,14 @@
 
 //         <div className="bg-gradient-to-br from-yellow-500/20 to-orange-600/20 p-6 rounded-xl border border-yellow-500/30 hover:scale-105 transition">
 //           <h3 className="text-sm text-yellow-300">Fee Status</h3>
-//           <p className="text-2xl font-bold mt-2 text-yellow-400">Unpaid</p>
+//           <p className="text-2xl font-bold mt-2 text-yellow-400">
+//             {user?.feeStatus || "Unpaid"}
+//           </p>
 //         </div>
 
 //       </div>
 
-//       {/* Tip Banner */}
+//       {/* TIP */}
 //       <div className="bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border border-yellow-400/30 rounded-lg p-4 mb-10">
 //         <span className="font-semibold text-yellow-400">PRO TIP</span>
 //         <span className="ml-3 text-gray-300">
@@ -81,10 +229,11 @@
 //         </span>
 //       </div>
 
-//       {/* Quick Actions */}
+//       {/* QUICK ACTIONS */}
 //       <h2 className="text-xl font-semibold mb-5">Quick Actions</h2>
 
 //       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+
 //         {quickActions.map((action, index) => (
 //           <div
 //             key={index}
@@ -93,10 +242,18 @@
 //             hover:scale-105 hover:shadow-lg cursor-pointer transition`}
 //           >
 //             <div className="text-3xl mb-2">{action.icon}</div>
+
 //             <h3 className="font-semibold">{action.title}</h3>
+
 //             <p className="text-sm text-gray-400">{action.desc}</p>
 //           </div>
 //         ))}
+
+//       </div>
+
+//       {/* NESTED ROUTES RENDER HERE */}
+//       <div className="mt-10">
+//         <Outlet />
 //       </div>
 
 //     </div>
@@ -105,156 +262,164 @@
 
 
 
+import { useState } from 'react';
+import { NavLink, Outlet, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
+import { motion, AnimatePresence } from 'framer-motion';
 
-import React from "react";
-import { useNavigate, Outlet } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
+const NAV_ITEMS = [
+  { to: '',            icon: '🏠', label: 'Overview',    locked: false },
+  { to: 'attendance',  icon: '📅', label: 'Attendance',  locked: true  },
+  { to: 'marks',       icon: '📊', label: 'My Marks',    locked: true  },
+  { to: 'assignments', icon: '📝', label: 'Assignments', locked: true  },
+  { to: 'doubts',      icon: '💬', label: 'Ask Doubt',   locked: true  },
+  { to: 'notices',     icon: '📢', label: 'Notices',     locked: true  },
+  { to: 'notes',       icon: '📚', label: 'Notes',       locked: false },
+  { to: 'profile',     icon: '👤', label: 'My Profile',  locked: false },
+];
 
-export default function Dashboard() {
+function Sidebar({ onClose }) {
+  const { user, logout } = useAuth();
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const isEnrolled = user?.isEnrolled;
 
-  const greet = () => {
-    const h = new Date().getHours();
-    if (h < 12) return "Good Morning";
-    if (h < 17) return "Good Afternoon";
-    return "Good Evening";
+  const handleLogout = async () => {
+    await logout();
+    navigate('/login');
   };
 
-  const quickActions = [
-    {
-      title: "Attendance",
-      desc: "Track presence",
-      icon: "📅",
-      color: "from-red-500/20 to-red-700/20",
-      border: "border-red-500/30",
-      path: "/dashboard/attendance",
-    },
-    {
-      title: "My Marks",
-      desc: "Exam results",
-      icon: "📊",
-      color: "from-blue-500/20 to-indigo-700/20",
-      border: "border-blue-500/30",
-      path: "/dashboard/marks",
-    },
-    {
-      title: "Assignments",
-      desc: "Pending tasks",
-      icon: "📝",
-      color: "from-purple-500/20 to-purple-700/20",
-      border: "border-purple-500/30",
-      path: "/dashboard/assignments",
-    },
-    {
-      title: "Ask Doubt",
-      desc: "Get help",
-      icon: "💬",
-      color: "from-green-500/20 to-green-700/20",
-      border: "border-green-500/30",
-      path: "/dashboard/doubts",
-    },
-    {
-      title: "Notices",
-      desc: "Latest updates",
-      icon: "📢",
-      color: "from-yellow-500/20 to-orange-600/20",
-      border: "border-yellow-500/30",
-      path: "/dashboard/notices",
-    },
-    {
-      title: "Study Notes",
-      desc: "Download material",
-      icon: "📚",
-      color: "from-cyan-500/20 to-blue-600/20",
-      border: "border-cyan-500/30",
-      path: "/dashboard/notes",
-    },
-    {
-      title: "My Profile",
-      desc: "Edit profile",
-      icon: "👤",
-      color: "from-pink-500/20 to-rose-600/20",
-      border: "border-pink-500/30",
-      path: "/dashboard/profile",
-    },
-  ];
+  return (
+    <div className="flex flex-col h-full bg-[#080c1e] border-r border-white/8">
+
+      {/* Brand */}
+      <div className="p-5 border-b border-white/8">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl flex items-center justify-center font-black text-sm border-2 flex-shrink-0"
+              style={{ background: 'linear-gradient(135deg,#1a2f6e,#0d1a40)', borderColor: 'rgba(245,200,66,0.5)', color: '#f5c842' }}>
+              A1
+            </div>
+            <div>
+              <p className="font-black text-white text-sm leading-tight">Student Panel</p>
+              <p className="text-gray-500 text-[10px] truncate max-w-[110px]">{user?.name || 'Student'}</p>
+            </div>
+          </div>
+          {onClose && (
+            <button onClick={onClose} className="text-gray-500 hover:text-white lg:hidden text-lg">✕</button>
+          )}
+        </div>
+      </div>
+
+      {/* Enrollment badge */}
+      <div className="px-4 pt-4 pb-2">
+        <div className={`flex items-center gap-2 px-3 py-2 rounded-xl text-[10px] font-black tracking-wider uppercase border ${
+          isEnrolled
+            ? 'bg-green-900/20 border-green-700/30 text-green-400'
+            : 'bg-yellow-900/20 border-yellow-700/30 text-yellow-400'
+        }`}>
+          <span className={`w-1.5 h-1.5 rounded-full flex-shrink-0 animate-pulse ${isEnrolled ? 'bg-green-400' : 'bg-yellow-400'}`} />
+          {isEnrolled ? `Enrolled · Class ${user?.class}` : 'Not Enrolled'}
+        </div>
+      </div>
+
+      {/* Nav */}
+      <nav className="flex-1 px-3 py-3 space-y-0.5 overflow-y-auto">
+        {NAV_ITEMS.map(item => {
+          const isLocked   = item.locked && !isEnrolled;
+          const fullPath   = `/dashboard${item.to ? `/${item.to}` : ''}`;
+
+          if (isLocked) {
+            return (
+              <div key={item.to}
+                className="flex items-center justify-between px-4 py-2.5 rounded-xl text-gray-600 cursor-not-allowed select-none">
+                <div className="flex items-center gap-3">
+                  <span className="text-base opacity-40">{item.icon}</span>
+                  <span className="text-sm font-medium">{item.label}</span>
+                </div>
+                <span className="text-xs opacity-60">🔒</span>
+              </div>
+            );
+          }
+
+          return (
+            <NavLink key={item.to} to={fullPath} end={item.to === ''}
+              onClick={onClose}
+              className={({ isActive }) =>
+                `flex items-center justify-between px-4 py-2.5 rounded-xl text-sm font-medium transition-all ${
+                  isActive
+                    ? 'bg-royal text-white font-bold shadow-lg shadow-royal/20'
+                    : 'text-gray-400 hover:bg-white/5 hover:text-white'
+                }`
+              }>
+              <div className="flex items-center gap-3">
+                <span className="text-base">{item.icon}</span>
+                <span>{item.label}</span>
+              </div>
+              <span className="text-gray-600 text-xs">›</span>
+            </NavLink>
+          );
+        })}
+      </nav>
+
+      {/* Logout */}
+      <div className="p-3 border-t border-white/8">
+        <button onClick={handleLogout}
+          className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-red-400 hover:bg-red-900/20 transition-colors text-sm font-medium">
+          <span className="text-base">↩</span>
+          <span>Logout</span>
+        </button>
+      </div>
+    </div>
+  );
+}
+
+export default function Dashboard() {
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#020617] via-[#0f172a] to-[#020617] text-white p-8">
+    <div className="flex min-h-screen bg-[#06091a]">
 
-      {/* HEADER */}
-      <div className="bg-gradient-to-r from-indigo-600 via-purple-600 to-cyan-500 p-8 rounded-2xl shadow-xl mb-10">
-        <h1 className="text-3xl font-bold">
-          {greet()}, {user?.name || "Student"} 👋
-        </h1>
+      {/* ── Desktop sidebar ─────────────────────── */}
+      <aside className="hidden lg:flex w-60 flex-col fixed top-0 left-0 h-screen z-30">
+        <Sidebar />
+      </aside>
 
-        <p className="opacity-80 mt-1">
-          Class {user?.class || "-"} · Student Portal
-        </p>
-      </div>
-
-      {/* STATS */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-
-        <div className="bg-gradient-to-br from-blue-500/20 to-blue-700/20 p-6 rounded-xl border border-blue-500/30 hover:scale-105 transition">
-          <h3 className="text-sm text-blue-300">Attendance</h3>
-          <p className="text-3xl font-bold mt-2">--%</p>
+      {/* ── Mobile top bar ──────────────────────── */}
+      <div className="lg:hidden fixed top-0 left-0 right-0 z-40 h-14 bg-[#080c1e] border-b border-white/8 flex items-center justify-between px-4">
+        <div className="flex items-center gap-2">
+          <div className="w-7 h-7 rounded-lg flex items-center justify-center font-black text-xs border"
+            style={{ background: '#0d1a40', borderColor: 'rgba(245,200,66,0.4)', color: '#f5c842' }}>A1</div>
+          <span className="font-black text-white text-sm">Student Panel</span>
         </div>
+        <button onClick={() => setMobileOpen(true)}
+          className="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-white">
+          ☰
+        </button>
+      </div>
 
-        <div className="bg-gradient-to-br from-green-500/20 to-green-700/20 p-6 rounded-xl border border-green-500/30 hover:scale-105 transition">
-          <h3 className="text-sm text-green-300">My Class</h3>
-          <p className="text-3xl font-bold mt-2">{user?.class || "-"}</p>
+      {/* ── Mobile drawer ───────────────────────── */}
+      <AnimatePresence>
+        {mobileOpen && (
+          <>
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              className="lg:hidden fixed inset-0 bg-black/60 z-40"
+              onClick={() => setMobileOpen(false)} />
+            <motion.aside
+              initial={{ x: -260 }} animate={{ x: 0 }} exit={{ x: -260 }}
+              transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+              className="lg:hidden fixed top-0 left-0 h-screen w-60 z-50">
+              <Sidebar onClose={() => setMobileOpen(false)} />
+            </motion.aside>
+          </>
+        )}
+      </AnimatePresence>
+
+      {/* ── Main content ────────────────────────── */}
+      <main className="flex-1 lg:ml-60 min-h-screen">
+        <div className="pt-14 lg:pt-0 p-4 sm:p-6 lg:p-8 max-w-6xl mx-auto">
+          <Outlet />
         </div>
-
-        <div className="bg-gradient-to-br from-purple-500/20 to-purple-700/20 p-6 rounded-xl border border-purple-500/30 hover:scale-105 transition">
-          <h3 className="text-sm text-purple-300">Exams</h3>
-          <p className="text-3xl font-bold mt-2">0</p>
-        </div>
-
-        <div className="bg-gradient-to-br from-yellow-500/20 to-orange-600/20 p-6 rounded-xl border border-yellow-500/30 hover:scale-105 transition">
-          <h3 className="text-sm text-yellow-300">Fee Status</h3>
-          <p className="text-2xl font-bold mt-2 text-yellow-400">
-            {user?.feeStatus || "Unpaid"}
-          </p>
-        </div>
-
-      </div>
-
-      {/* TIP */}
-      <div className="bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border border-yellow-400/30 rounded-lg p-4 mb-10">
-        <span className="font-semibold text-yellow-400">PRO TIP</span>
-        <span className="ml-3 text-gray-300">
-          Study in 25-minute focused bursts (Pomodoro technique).
-        </span>
-      </div>
-
-      {/* QUICK ACTIONS */}
-      <h2 className="text-xl font-semibold mb-5">Quick Actions</h2>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-
-        {quickActions.map((action, index) => (
-          <div
-            key={index}
-            onClick={() => navigate(action.path)}
-            className={`bg-gradient-to-br ${action.color} p-6 rounded-xl border ${action.border}
-            hover:scale-105 hover:shadow-lg cursor-pointer transition`}
-          >
-            <div className="text-3xl mb-2">{action.icon}</div>
-
-            <h3 className="font-semibold">{action.title}</h3>
-
-            <p className="text-sm text-gray-400">{action.desc}</p>
-          </div>
-        ))}
-
-      </div>
-
-      {/* NESTED ROUTES RENDER HERE */}
-      <div className="mt-10">
-        <Outlet />
-      </div>
+      </main>
 
     </div>
   );
