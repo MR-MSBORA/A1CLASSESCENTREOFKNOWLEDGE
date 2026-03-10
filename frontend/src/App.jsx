@@ -20,28 +20,29 @@ import Register       from "./pages/auth/Register";
 import ForgotPassword from "./pages/auth/ForgotPassword";
 
 /* Student Pages */
-import Dashboard  from "./pages/student/Dashboard";
-import Attendance from "./pages/student/Attendance";
-import Marks      from "./pages/student/Marks";
-import Assignments from "./pages/student/Assignments";
-import Doubts     from "./pages/student/Doubts";
-import Notices    from "./pages/student/Notices";
-import MyNotes    from "./pages/student/MyNotes";
-import Profile    from "./pages/student/Profile";
+import Dashboard        from "./pages/student/Dashboard";
+import StudentOverview  from "./pages/student/Overview";   // ✅ student overview
+import Attendance       from "./pages/student/Attendance";
+import Marks            from "./pages/student/Marks";
+import Assignments      from "./pages/student/Assignments";
+import Doubts           from "./pages/student/Doubts";
+import Notices          from "./pages/student/Notices";
+import MyNotes          from "./pages/student/MyNotes";
+import Profile          from "./pages/student/Profile";
 
 /* Admin Pages */
-import AdminLayout        from "./pages/admin/AdminLayout";
-import Overview           from "./pages/admin/Overview";
-import ManageStudents     from "./pages/admin/ManageStudents";
-import ManageStaff        from "./pages/admin/ManageStaff";
-import ManageNotes        from "./pages/admin/ManageNotes";
-import ManageGallery      from "./pages/admin/ManageGallery";
-import ManageDoubts       from "./pages/admin/ManageDoubts";
-import ManageResults      from "./pages/admin/ManageResults";
-import ManageAttendance   from "./pages/admin/ManageAttendance";
-import ManageMarks        from "./pages/admin/ManageMarks";
+import AdminLayout         from "./pages/admin/AdminLayout";
+import AdminOverview       from "./pages/admin/Overview";   // ✅ admin overview
+import ManageStudents      from "./pages/admin/ManageStudents";
+import ManageStaff         from "./pages/admin/ManageStaff";
+import ManageNotes         from "./pages/admin/ManageNotes";
+import ManageGallery       from "./pages/admin/ManageGallery";
+import ManageDoubts        from "./pages/admin/ManageDoubts";
+import ManageResults       from "./pages/admin/ManageResults";
+import ManageAttendance    from "./pages/admin/ManageAttendance";
+import ManageMarks         from "./pages/admin/ManageMarks";
 import ManageAnnouncements from "./pages/admin/ManageAnnouncements";
-import ManageReviews      from "./pages/admin/ManageReviews";
+import ManageReviews       from "./pages/admin/ManageReviews";
 
 /* Teacher */
 import TeacherLayout from "./pages/teacher/TeacherLayout";
@@ -60,13 +61,13 @@ export default function App() {
     <Routes>
 
       {/* ── Public Pages ─────────────────────────── */}
-      <Route path="/"        element={<PL><Home /></PL>} />
-      <Route path="/about"   element={<PL><About /></PL>} />
-      <Route path="/courses" element={<PL><Courses /></PL>} />
-      <Route path="/notes"   element={<PL><NotesStore /></PL>} />
-      <Route path="/results" element={<PL><Results /></PL>} />
-      <Route path="/contact" element={<PL><Contact /></PL>} />
-      <Route path="/gallery" element={<PL><Gallery /></PL>} />
+      <Route path="/"         element={<PL><Home /></PL>} />
+      <Route path="/about"    element={<PL><About /></PL>} />
+      <Route path="/courses"  element={<PL><Courses /></PL>} />
+      <Route path="/notes"    element={<PL><NotesStore /></PL>} />
+      <Route path="/results"  element={<PL><Results /></PL>} />
+      <Route path="/contact"  element={<PL><Contact /></PL>} />
+      <Route path="/gallery"  element={<PL><Gallery /></PL>} />
       <Route path="/teachers" element={<PL><Teachers /></PL>} />
 
       {/* ── Auth ─────────────────────────────────── */}
@@ -75,7 +76,6 @@ export default function App() {
       <Route path="/forgot-password" element={<ForgotPassword />} />
 
       {/* ── Student Portal ───────────────────────── */}
-      {/* Dashboard is the LAYOUT — child routes render inside its <Outlet /> */}
       <Route
         path="/dashboard"
         element={
@@ -84,13 +84,13 @@ export default function App() {
           </ProtectedRoute>
         }
       >
-        {/* index = /dashboard (overview) */}
-        <Route index         element={<Overview />} />
+        {/* ✅ Uses StudentOverview — NOT the admin one */}
+        <Route index              element={<StudentOverview />} />
         <Route path="attendance"  element={<Attendance />} />
         <Route path="marks"       element={<Marks />} />
         <Route path="assignments" element={<Assignments />} />
         <Route path="doubts"      element={<Doubts />} />
-        <Route path="notices"     element={<Notices />} />
+        <Route path="notices"     element={<Notices />} />  {/* ✅ unlocked in sidebar too */}
         <Route path="notes"       element={<MyNotes />} />
         <Route path="profile"     element={<Profile />} />
       </Route>
@@ -114,17 +114,18 @@ export default function App() {
           </ProtectedRoute>
         }
       >
-        <Route index              element={<Overview />} />
-        <Route path="students"    element={<ManageStudents />} />
-        <Route path="staff"       element={<ManageStaff />} />
-        <Route path="notes"       element={<ManageNotes />} />
-        <Route path="gallery"     element={<ManageGallery />} />
-        <Route path="doubts"      element={<ManageDoubts />} />
-        <Route path="results"     element={<ManageResults />} />
-        <Route path="attendance"  element={<ManageAttendance />} />
-        <Route path="marks"       element={<ManageMarks />} />
+        {/* ✅ Uses AdminOverview — separate from student */}
+        <Route index                element={<AdminOverview />} />
+        <Route path="students"      element={<ManageStudents />} />
+        <Route path="staff"         element={<ManageStaff />} />
+        <Route path="notes"         element={<ManageNotes />} />
+        <Route path="gallery"       element={<ManageGallery />} />
+        <Route path="doubts"        element={<ManageDoubts />} />
+        <Route path="results"       element={<ManageResults />} />
+        <Route path="attendance"    element={<ManageAttendance />} />
+        <Route path="marks"         element={<ManageMarks />} />
         <Route path="announcements" element={<ManageAnnouncements />} />
-        <Route path="reviews"     element={<ManageReviews />} />
+        <Route path="reviews"       element={<ManageReviews />} />
       </Route>
 
     </Routes>
